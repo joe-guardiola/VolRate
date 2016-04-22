@@ -1,6 +1,8 @@
 //
 //  AppDelegate.swift
 
+
+//a lot of unnecessary stuff in here but I wanted to keep it all because I am learning what it does. Stole some good comments from the internet so I remember too! 
 import UIKit
 import CoreData
 
@@ -51,8 +53,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
     
-    // MARK: - Core Data stack
-    
     lazy var applicationDocumentsDirectory: NSURL = {
         // The directory the application uses to store the Core Data store file. This code uses a directory named "com.wembleyleach.CoreDataDemo" in the application's documents Application Support directory.
         let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
@@ -97,8 +97,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         managedObjectContext.persistentStoreCoordinator = coordinator
         return managedObjectContext
     }()
-    
-    // MARK: - Core Data Saving support
     
     func saveContext () {
         if managedObjectContext.hasChanges {
