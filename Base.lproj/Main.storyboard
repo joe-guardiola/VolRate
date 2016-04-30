@@ -287,7 +287,7 @@
                     </view>
                     <connections>
                         <outlet property="organizationImageView" destination="sIi-c7-ZzH" id="16x-M4-hp8"/>
-                        <outlet property="ratingButton" destination="bfV-w0-p2E" id="33G-i4-b5w"/>
+                        <outlet property="rateOrganizationButton" destination="bfV-w0-p2E" id="KJu-MS-tid"/>
                         <outlet property="tableView" destination="d5j-mq-d4E" id="zwF-uT-7fs"/>
                     </connections>
                 </viewController>
@@ -321,7 +321,7 @@
                                             <constraint firstAttribute="width" constant="70" id="kmB-32-OEQ"/>
                                         </constraints>
                                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        <state key="normal" image="dislike"/>
+                                        <state key="normal" image="hatedIt"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                                 <integer key="value" value="35"/>
@@ -339,7 +339,7 @@
                                             <constraint firstAttribute="width" constant="70" id="S5Z-3P-pdF"/>
                                         </constraints>
                                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        <state key="normal" image="good"/>
+                                        <state key="normal" image="itWasAlrightIGuess"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                                 <integer key="value" value="35"/>
@@ -357,7 +357,7 @@
                                             <constraint firstAttribute="width" constant="70" id="knW-ho-ZPI"/>
                                         </constraints>
                                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        <state key="normal" image="great"/>
+                                        <state key="normal" image="perfect"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                                 <integer key="value" value="35"/>
@@ -408,9 +408,9 @@
                     </view>
                     <connections>
                         <outlet property="backgroundImageView" destination="kEi-nu-zWD" id="uNw-VJ-Esu"/>
-                        <outlet property="dislikeButton" destination="dCU-bI-Bf7" id="bPa-dA-nrx"/>
-                        <outlet property="goodButton" destination="UhC-vW-ghO" id="vdh-CN-zIy"/>
-                        <outlet property="greatButton" destination="uae-HL-6eo" id="wta-hD-ViG"/>
+                        <outlet property="hatedIt" destination="dCU-bI-Bf7" id="h9Q-cH-SFO"/>
+                        <outlet property="itWasAlrightIGuess" destination="UhC-vW-ghO" id="0RS-6f-EI3"/>
+                        <outlet property="perfect" destination="uae-HL-6eo" id="3Cp-O3-9En"/>
                         <outlet property="ratingStackView" destination="OOL-i5-BoK" id="FEq-PN-wt4"/>
                     </connections>
                 </viewController>
@@ -750,12 +750,12 @@
     <resources>
         <image name="barrafina" width="200" height="200"/>
         <image name="close" width="84" height="84"/>
-        <image name="dislike" width="84" height="84"/>
         <image name="favorite" width="25" height="25"/>
-        <image name="good" width="256" height="256"/>
-        <image name="great" width="256" height="256"/>
+        <image name="hatedIt" width="84" height="84"/>
         <image name="iphoneBackGround" width="736" height="1309"/>
+        <image name="itWasAlrightIGuess" width="256" height="256"/>
         <image name="map" width="48" height="48"/>
+        <image name="perfect" width="256" height="256"/>
         <image name="photoalbum" width="84" height="84"/>
         <image name="rating" width="256" height="256"/>
     </resources>

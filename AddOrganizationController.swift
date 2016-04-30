@@ -4,6 +4,7 @@
 
 import UIKit
 import CoreData
+import Firebase
 
 class AddOrganizationController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
@@ -13,11 +14,13 @@ class AddOrganizationController: UITableViewController, UIImagePickerControllerD
     @IBOutlet var organizationLocationTextField:UITextField!
     @IBOutlet var organizationPhoneTextField:UITextField!
     
+    var myRootRef = Firebase(url:"https://volrate.firebaseio.com/Organization")
     var organizationVisited:Bool?
     var organization:Organization!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    
     }
 
     override func didReceiveMemoryWarning() {
@@ -81,24 +84,35 @@ class AddOrganizationController: UITableViewController, UIImagePickerControllerD
             return
         }
 
-        if let managedObjectContext = (UIApplication.sharedApplication().delegate as? AppDelegate)?.managedObjectContext {
-            organization = NSEntityDescription.insertNewObjectForEntityForName("Organization", inManagedObjectContext: managedObjectContext) as! Organization
-            organization.name = organizationNameTextField.text!
-            organization.type = organizationTypeTextField.text!
-            organization.location = organizationLocationTextField.text!
-            organization.phoneNumber = organizationPhoneTextField.text!
-            if let organizationImage = imageView.image {
-                organization.image = UIImagePNGRepresentation(organizationImage)
-            }
-            organization.isVisited = organizationVisited
-            
-            do {
-                try managedObjectContext.save()
-            } catch {
-                print(error)
-                return
-            }
+//       if let managedObjectContext = (UIApplication.sharedApplication().delegate as? AppDelegate)?.managedObjectContext {
+//            organization = NSEntityDescription.insertNewObjectForEntityForName("Organization", inManagedObjectContext: managedObjectContext) as! Organization
+//            organization.name = organizationNameTextField.text!
+//            organization.type = organizationTypeTextField.text!
+//            organization.location = organizationLocationTextField.text!
+//            organization.phoneNumber = organizationPhoneTextField.text!
+//            if let organizationImage = imageView.image {
+//                organization.image = UIImagePNGRepresentation(organizationImage)
+//            }
+//            organization.isVisited = organizationVisited
+//            
+//            do {
+//                try managedObjectContext.save()
+//            } catch {
+//                print(error)
+//                return
+//            }
+//        }
+        
+        //need to add the image somehow
+        let tempKey = organizationNameTextField.text! + organizationLocationTextField.text!
+        let newOrgRef = myRootRef.childByAppendingPath(tempKey)
+        var data:NSData = NSData()
+        if let organizationImage = imageView.image {
+            data = UIImageJPEGRepresentation(organizationImage,0.1)!
         }
+        let base64String = data.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
+        let newOrg = ["name": organizationNameTextField.text!, "type": organizationTypeTextField.text!, "location":organizationLocationTextField.text!, "phoneNumber": organizationPhoneTextField.text!, "image": base64String, "isVisited": organizationVisited!, "rating": "rating"]
+        newOrgRef.setValue(newOrg)
         
         self.performSegueWithIdentifier("unwindToHomeScreen", sender: self)
     }

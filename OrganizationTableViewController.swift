@@ -2,13 +2,18 @@
 
 import UIKit
 import CoreData
+import Firebase
 
 class OrganizationTableViewController: UITableViewController, NSFetchedResultsControllerDelegate, UISearchResultsUpdating {
     var organizations:[Organization] = []
     var fetchResultController:NSFetchedResultsController!
 
     var searchController:UISearchController!
-    var searchResults:[Organization] = []
+    var results:[Organization] = []
+    
+    
+    var myRootRef = Firebase(url:"https://volrate.firebaseio.com/Organization")
+    //let dataSource: FirebaseTableDataSource!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,6 +47,25 @@ class OrganizationTableViewController: UITableViewController, NSFetchedResultsCo
         searchController.searchBar.tintColor = UIColor.whiteColor()
         
         tableView.tableHeaderView = searchController.searchBar
+        
+        
+        
+        
+        myRootRef.observeEventType(.Value, withBlock: {snapshot in
+            print(snapshot.value)
+            
+            self.organizations = []
+            
+            if let snapshots = snapshot.children.allObjects as? [FDataSnapshot] {
+            
+                for snap in snapshots {
+                    let newOrganization = Organization(snap: snap)
+                    self.organizations.insert(newOrganization, atIndex: 0)
+                }
+            }
+            self.tableView.reloadData()
+        })
+        
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -62,6 +86,14 @@ class OrganizationTableViewController: UITableViewController, NSFetchedResultsCo
         if let pageViewController = storyboard?.instantiateViewControllerWithIdentifier("WalkthroughController") as? WalkthroughPageViewController {
             presentViewController(pageViewController, animated: true, completion: nil)
         }
+        
+//        myRootRef.observeEventType(.Value, withBlock: { snapshot in
+//            var newItems = [Organization]()
+//            for item in snapshot.children {
+//                //let newOrganizationInfo = Organization(snapshot: item as! FDataSnapshot)
+//                
+//            }
+//        })
     }
     
     override func didReceiveMemoryWarning() {
@@ -74,7 +106,7 @@ class OrganizationTableViewController: UITableViewController, NSFetchedResultsCo
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if searchController.active {
-            return searchResults.count
+            return results.count
         } else {
             return organizations.count
         }
@@ -85,17 +117,17 @@ class OrganizationTableViewController: UITableViewController, NSFetchedResultsCo
         let cellIdentifier = "Cell"
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! OrganizationTableViewCell
         
-        let organization = (searchController.active) ? searchResults[indexPath.row] : organizations[indexPath.row]
+        let organization = (searchController.active) ? results[indexPath.row] : organizations[indexPath.row]
         
         // make the cell look pretty!
         cell.nameLabel.text = organization.name
         cell.thumbnailImageView.image = UIImage(data: organization.image!)
         cell.locationLabel.text = organization.location
         cell.typeLabel.text = organization.type
-        if let isVisited = organization.isVisited?.boolValue {
-            cell.accessoryType = isVisited ? .Checkmark : .None
-        }
-        
+//        if let isVisited = organization.isVisited?.boolValue {
+//            cell.accessoryType = isVisited ? .Checkmark : .None
+//        }
+        cell.accessoryType = organization.isVisited ? .Checkmark : .None
         return cell
     }
     
@@ -126,18 +158,21 @@ class OrganizationTableViewController: UITableViewController, NSFetchedResultsCo
         
         // delete button creation
         let deleteAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "Delete",handler: { (action, indexPath) -> Void in
-            
+            let key = self.organizations[indexPath.row].name +  self.organizations[indexPath.row].location
+            var myRootRef = Firebase(url:"https://volrate.firebaseio.com/Organization")
+            myRootRef = myRootRef.childByAppendingPath(key)
+            myRootRef.removeValue()
             // delete row from database
-            if let managedObjectContext = (UIApplication.sharedApplication().delegate as? AppDelegate)?.managedObjectContext {
-                let organizationToDelete = self.fetchResultController.objectAtIndexPath(indexPath) as! Organization
-                managedObjectContext.deleteObject(organizationToDelete)
-                
-                do {
-                    try managedObjectContext.save()
-                } catch {
-                    print(error)
-                }
-            }
+//            if let managedObjectContext = (UIApplication.sharedApplication().delegate as? AppDelegate)?.managedObjectContext {
+//                let organizationToDelete = self.fetchResultController.objectAtIndexPath(indexPath) as! Organization
+//                managedObjectContext.deleteObject(organizationToDelete)
+//
+//                do {
+//                    try managedObjectContext.save()
+//                } catch {
+//                    print(error)
+//                }
+//            }
         })
         
         //set the button color
@@ -146,13 +181,13 @@ class OrganizationTableViewController: UITableViewController, NSFetchedResultsCo
 
         return [deleteAction, shareAction]
     }
-
+//
     // prepare for navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "showOrganizationInfo" {
             if let indexPath = tableView.indexPathForSelectedRow {
                 let destinationController = segue.destinationViewController as! OrganizationDetailViewController
-                destinationController.organization = (searchController.active) ? searchResults[indexPath.row] : organizations[indexPath.row]
+                destinationController.organization = (searchController.active) ? results[indexPath.row] : organizations[indexPath.row]
                 // hide tab
                 destinationController.hidesBottomBarWhenPushed = true
             }
@@ -198,7 +233,7 @@ class OrganizationTableViewController: UITableViewController, NSFetchedResultsCo
     
     //search for organizations by title and location
     func filterContentForSearchText(searchText: String) {
-        searchResults = organizations.filter({ (organization: Organization) -> Bool in
+        results = organizations.filter({ (organization: Organization) -> Bool in
             let nameMatch = organization.name.rangeOfString(searchText, options: NSStringCompareOptions.CaseInsensitiveSearch)
             let locationMatch = organization.location.rangeOfString(searchText, options: NSStringCompareOptions.CaseInsensitiveSearch)
             return ((nameMatch != nil) || (locationMatch != nil))

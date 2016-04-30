@@ -2,11 +2,12 @@
 //  OrganizationDetailViewController.swift
 
 import UIKit
+import Firebase
 
 class OrganizationDetailViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     @IBOutlet var organizationImageView:UIImageView!
     @IBOutlet var tableView:UITableView!
-    @IBOutlet var ratingButton:UIButton!
+    @IBOutlet var rateOrganizationButton:UIButton!
     
     var organization:Organization!
 
@@ -32,7 +33,7 @@ class OrganizationDetailViewController: UIViewController, UITableViewDataSource,
         tableView.rowHeight = UITableViewAutomaticDimension
         
         if let rating = organization.rating {
-            ratingButton.setImage(UIImage(named: rating), forState: .Normal)
+            rateOrganizationButton.setImage(UIImage(named: rating), forState: .Normal)
         }
         
     }
@@ -71,9 +72,10 @@ class OrganizationDetailViewController: UIViewController, UITableViewDataSource,
             cell.valueLabel.text = organization.phoneNumber
         case 4:
             cell.fieldLabel.text = "Been here"
-            if let isVisited = organization.isVisited?.boolValue {
-                cell.valueLabel.text = isVisited ? "Yes, I've been here before" : "No"
-            }
+//            if let isVisited = organization.isVisited?.boolValue {
+//                cell.valueLabel.text = isVisited ? "Yes, I've been here before" : "No"
+//            }
+            cell.valueLabel.text = organization.isVisited ? "Yes, I've been here before" : "No"
         default:
             cell.fieldLabel.text = ""
             cell.valueLabel.text = ""
@@ -88,7 +90,11 @@ class OrganizationDetailViewController: UIViewController, UITableViewDataSource,
         if let reviewViewController = segue.sourceViewController as? ReviewViewController {
             if let rating = reviewViewController.rating where rating != "" {
                 organization.rating = rating
-                ratingButton.setImage(UIImage(named: rating), forState: .Normal)
+                var myRootRef = Firebase(url:"https://volrate.firebaseio.com/Organization")
+                let key = organization.name + organization.location
+                myRootRef = myRootRef.childByAppendingPath(key).childByAppendingPath("rating")
+                myRootRef.setValue(rating)
+                rateOrganizationButton.setImage(UIImage(named: rating), forState: .Normal)
                 
                 if let managedObjectContext = (UIApplication.sharedApplication().delegate as? AppDelegate)?.managedObjectContext {
                     do {
