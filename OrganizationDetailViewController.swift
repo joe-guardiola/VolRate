@@ -72,9 +72,6 @@ class OrganizationDetailViewController: UIViewController, UITableViewDataSource,
             cell.valueLabel.text = organization.phoneNumber
         case 4:
             cell.fieldLabel.text = "Been here"
-//            if let isVisited = organization.isVisited?.boolValue {
-//                cell.valueLabel.text = isVisited ? "Yes, I've been here before" : "No"
-//            }
             cell.valueLabel.text = organization.isVisited ? "Yes, I've been here before" : "No"
         default:
             cell.fieldLabel.text = ""
@@ -95,14 +92,6 @@ class OrganizationDetailViewController: UIViewController, UITableViewDataSource,
                 myRootRef = myRootRef.childByAppendingPath(key).childByAppendingPath("rating")
                 myRootRef.setValue(rating)
                 rateOrganizationButton.setImage(UIImage(named: rating), forState: .Normal)
-                
-                if let managedObjectContext = (UIApplication.sharedApplication().delegate as? AppDelegate)?.managedObjectContext {
-                    do {
-                        try managedObjectContext.save()
-                    } catch {
-                        print(error)
-                    }
-                }
             }
         }
     }

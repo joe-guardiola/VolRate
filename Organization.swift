@@ -23,7 +23,6 @@ class Organization {
          phoneNumber = snap.value.objectForKey("phoneNumber") as? String
          let imageString = snap.value.objectForKey("image") as? String
          image = NSData(base64EncodedString: imageString!, options: NSDataBase64DecodingOptions(rawValue: 0))
-        //                    let decodedImage = NSData(base64EncodedString: imageString!, options: NSDataBase64DecodingOptions(rawValue: 0))
          isVisited = (snap.value.objectForKey("isVisited") as? Bool)!
          rating = snap.value.objectForKey("rating") as? String
 

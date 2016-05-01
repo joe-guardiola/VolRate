@@ -13,7 +13,6 @@ class OrganizationTableViewController: UITableViewController, NSFetchedResultsCo
     
     
     var myRootRef = Firebase(url:"https://volrate.firebaseio.com/Organization")
-    //let dataSource: FirebaseTableDataSource!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,18 +25,6 @@ class OrganizationTableViewController: UITableViewController, NSFetchedResultsCo
         let fetchRequest = NSFetchRequest(entityName: "Organization")
         let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
-        
-        if let managedObjectContext = (UIApplication.sharedApplication().delegate as? AppDelegate)?.managedObjectContext {
-            fetchResultController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
-            fetchResultController.delegate = self
-            
-            do {
-                try fetchResultController.performFetch()
-                organizations = fetchResultController.fetchedObjects as! [Organization]
-            } catch {
-                print(error)
-            }
-        }
         
         searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
@@ -52,8 +39,6 @@ class OrganizationTableViewController: UITableViewController, NSFetchedResultsCo
         
         
         myRootRef.observeEventType(.Value, withBlock: {snapshot in
-            print(snapshot.value)
-            
             self.organizations = []
             
             if let snapshots = snapshot.children.allObjects as? [FDataSnapshot] {
@@ -86,14 +71,6 @@ class OrganizationTableViewController: UITableViewController, NSFetchedResultsCo
         if let pageViewController = storyboard?.instantiateViewControllerWithIdentifier("WalkthroughController") as? WalkthroughPageViewController {
             presentViewController(pageViewController, animated: true, completion: nil)
         }
-        
-//        myRootRef.observeEventType(.Value, withBlock: { snapshot in
-//            var newItems = [Organization]()
-//            for item in snapshot.children {
-//                //let newOrganizationInfo = Organization(snapshot: item as! FDataSnapshot)
-//                
-//            }
-//        })
     }
     
     override func didReceiveMemoryWarning() {
@@ -124,9 +101,6 @@ class OrganizationTableViewController: UITableViewController, NSFetchedResultsCo
         cell.thumbnailImageView.image = UIImage(data: organization.image!)
         cell.locationLabel.text = organization.location
         cell.typeLabel.text = organization.type
-//        if let isVisited = organization.isVisited?.boolValue {
-//            cell.accessoryType = isVisited ? .Checkmark : .None
-//        }
         cell.accessoryType = organization.isVisited ? .Checkmark : .None
         return cell
     }
@@ -162,17 +136,6 @@ class OrganizationTableViewController: UITableViewController, NSFetchedResultsCo
             var myRootRef = Firebase(url:"https://volrate.firebaseio.com/Organization")
             myRootRef = myRootRef.childByAppendingPath(key)
             myRootRef.removeValue()
-            // delete row from database
-//            if let managedObjectContext = (UIApplication.sharedApplication().delegate as? AppDelegate)?.managedObjectContext {
-//                let organizationToDelete = self.fetchResultController.objectAtIndexPath(indexPath) as! Organization
-//                managedObjectContext.deleteObject(organizationToDelete)
-//
-//                do {
-//                    try managedObjectContext.save()
-//                } catch {
-//                    print(error)
-//                }
-//            }
         })
         
         //set the button color
@@ -181,7 +144,6 @@ class OrganizationTableViewController: UITableViewController, NSFetchedResultsCo
 
         return [deleteAction, shareAction]
     }
-//
     // prepare for navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "showOrganizationInfo" {

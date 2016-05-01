@@ -83,25 +83,6 @@ class AddOrganizationController: UITableViewController, UIImagePickerControllerD
             self.presentViewController(alert, animated: true, completion: nil)
             return
         }
-
-//       if let managedObjectContext = (UIApplication.sharedApplication().delegate as? AppDelegate)?.managedObjectContext {
-//            organization = NSEntityDescription.insertNewObjectForEntityForName("Organization", inManagedObjectContext: managedObjectContext) as! Organization
-//            organization.name = organizationNameTextField.text!
-//            organization.type = organizationTypeTextField.text!
-//            organization.location = organizationLocationTextField.text!
-//            organization.phoneNumber = organizationPhoneTextField.text!
-//            if let organizationImage = imageView.image {
-//                organization.image = UIImagePNGRepresentation(organizationImage)
-//            }
-//            organization.isVisited = organizationVisited
-//            
-//            do {
-//                try managedObjectContext.save()
-//            } catch {
-//                print(error)
-//                return
-//            }
-//        }
         
         //need to add the image somehow
         let tempKey = organizationNameTextField.text! + organizationLocationTextField.text!
