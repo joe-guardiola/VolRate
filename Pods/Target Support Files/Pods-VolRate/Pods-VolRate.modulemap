@@ -1,6 +1,0 @@
-framework module Pods_VolRate {
-  umbrella header "Pods-VolRate-umbrella.h"
-
-  export *
-  module * { export * }
-}
