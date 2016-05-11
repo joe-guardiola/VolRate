@@ -123,7 +123,7 @@ class OrganizationTableViewController: UITableViewController, NSFetchedResultsCo
         
         let shareAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "Share", handler: { (action, indexPath) -> Void in
             
-            let defaultText = "Just checking in at " + self.organizations[indexPath.row].name
+            let defaultText = "I am volunteering at " + self.organizations[indexPath.row].name + " today!."
             if let imageToShare = UIImage(data: self.organizations[indexPath.row].image!) {
                 let activityController = UIActivityViewController(activityItems: [defaultText, imageToShare], applicationActivities: nil)
                 self.presentViewController(activityController, animated: true, completion: nil)

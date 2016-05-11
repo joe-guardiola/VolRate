@@ -53,7 +53,6 @@ class AboutTableViewController: UITableViewController {
                 // Display content in custom web view
                 performSegueWithIdentifier("showWebView", sender: self)
             }
-        // Follow Us section
         case 1:
             // Display content using SFSafariViewController
             if let url = NSURL(string: links[indexPath.row]) {

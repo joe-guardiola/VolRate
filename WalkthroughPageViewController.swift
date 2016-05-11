@@ -12,9 +12,6 @@ class WalkthroughPageViewController: UIPageViewController, UIPageViewControllerD
                        "Review how you felt volunteering at each organization."]
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-        // Set the data source to itself
         dataSource = self
         
         // Create the first walkthrough screen
@@ -25,7 +22,6 @@ class WalkthroughPageViewController: UIPageViewController, UIPageViewControllerD
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     func viewControllerAtIndex(index:Int) -> WalkthroughContentViewController? {
@@ -33,7 +29,6 @@ class WalkthroughPageViewController: UIPageViewController, UIPageViewControllerD
             return nil
         }
         
-        // Create a new view controller and pass suitable data
         if let pageContentViewController = storyboard?.instantiateViewControllerWithIdentifier("WalkthroughContentViewController") as? WalkthroughContentViewController {
             pageContentViewController.imageFile = pageImages[index]
             pageContentViewController.heading = pageHeadings[index]

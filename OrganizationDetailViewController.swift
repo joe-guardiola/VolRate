@@ -72,7 +72,7 @@ class OrganizationDetailViewController: UIViewController, UITableViewDataSource,
             cell.valueLabel.text = organization.phoneNumber
         case 4:
             cell.fieldLabel.text = "Been here"
-            cell.valueLabel.text = organization.isVisited ? "Yes, I've been here before" : "No"
+            cell.valueLabel.text = organization.isVisited ? "Yes, I've volunteered here before." : "No, but I plan to in the future."
         default:
             cell.fieldLabel.text = ""
             cell.valueLabel.text = ""
